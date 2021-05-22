@@ -1,0 +1,9 @@
+[Unit]
+Description=Make the computer with a simple UPS shuts down automatically,when the AC power is cut off. 
+
+[Service]
+Type=simple
+ExecStart=/root/ups-shutdown.sh/ups-shutdown.sh
+
+[Install]
+WantedBy=multi-user.target
