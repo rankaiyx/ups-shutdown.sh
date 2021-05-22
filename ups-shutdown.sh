@@ -6,12 +6,7 @@ network_card_name="enp2s0"
 shutdown_command()
 {
   #echo "shutdown start"
-  while true
-  do
-    #echo "shutdown is running..."
-    sleep 20s
-    shutdown now
-  done
+  shutdown now
 }
 
 send_message_to_all_user()
@@ -24,19 +19,19 @@ AC_Power_cut_off_time=0
 while true
 do
   read net_online < /sys/class/net/$network_card_name/carrier
-  if [ $net_online == "0" ]
+  if [ $net_online == "1" ]
   then
     AC_Power_cut_off_time=0
   else
     if [ $AC_Power_cut_off_time -lt 120 ]
     then
       send_message_to_all_user "$AC_Power_cut_off_time"
-      echo $(date +"%Y-%m-%d %H:%M.%S")"   AC_Power_cut_off_time: "$AC_Power_cut_off_time" < 120s   The system will shutdown!" >> ups-shutdown.log
-      AC_Power_cut_off_time=`expr $AC_Power_cut_off_time + 20`
+      echo $(date +"%Y-%m-%d %H:%M.%S")"   AC_Power_cut_off_time: "$AC_Power_cut_off_time" < 120s   The system will shutdown!" >> /root/ups-shutdown.sh/ups-shutdown.log
+      AC_Power_cut_off_time=`expr $AC_Power_cut_off_time + 5`
     else
-      echo $(date +"%Y-%m-%d %H:%M.%S")"   AC_Power_cut_off_time > 120s   shutdown start!" >> ups-shutdown.log
+      echo $(date +"%Y-%m-%d %H:%M.%S")"   AC_Power_cut_off_time > 120s   shutdown start!" >> /root/ups-shutdown.sh/ups-shutdown.log
       shutdown_command
     fi
   fi
-  sleep 1s
+  sleep 5s
 done
